@@ -33,3 +33,5 @@ plugins:
 
 # Custom variables
 owner : "Alexander Thulcke"
+
+theme: jekyll-theme-hacker
