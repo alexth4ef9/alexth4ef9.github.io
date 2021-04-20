@@ -1,0 +1,60 @@
+#!/usr/bin/python3
+
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Copyright 2021 Alexander Thulcke
+
+
+from os import path, makedirs, remove
+import sys
+from glob import glob
+
+root = path.realpath(path.join(path.dirname(path.realpath(sys.argv[0])), '..'))
+post_dir = path.join(root, '_posts')
+tag_dir = path.join(root, 'tags')
+
+
+def gettags():
+    posts = glob(path.join(post_dir, '*.md'))
+    tags = []
+    for post in posts:
+        found = False
+        with open(post, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if found:
+                    variables = line.split()
+                    if variables[0] == 'tags:':
+                        tags.extend(variables[1:])
+                        break
+                if line == '---':
+                    if not found:
+                        found = True
+                    else:
+                        break
+    return set(tags)
+
+
+def cleartags():
+    if not path.exists(tag_dir):
+        makedirs(tag_dir)
+    tags = glob(path.join(tag_dir, '*.md'))
+    for tag in tags:
+        remove(tag)
+
+
+def main():
+    cleartags()
+    for tag in gettags():
+        tagfile = path.join(tag_dir, tag + '.md')
+        with open(tagfile, 'w') as f:
+            print('---', file=f)
+            print('layout: tagpage', file=f)
+            print('title: \"Tag: ' + tag + '\"', file=f)
+            print('tag: ' + tag, file=f)
+            print('robots: noindex', file=f)
+            print('---', file=f)
+        print('generated: {0}'.format(tagfile))
+
+
+if __name__ == '__main__':
+    main()

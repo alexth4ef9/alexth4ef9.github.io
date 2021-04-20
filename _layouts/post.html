@@ -1,0 +1,18 @@
+---
+layout: default
+---
+
+<article>
+  <h2>{{ page.title }}</h2>
+  <time datetime="{{ page.date | date_to_xmlschema }}" class="by-line">{{ page.date | date_to_string }}</time>
+  {% if page.tags.size > 0 %}
+    <br/>
+    <span>[
+      {% for tag in page.tags %}
+        {% capture tag_name %}{{ tag }}{% endcapture %}
+        <a href="/tags/{{ tag_name }}"><code class="highligher-rouge"><nobr>{{ tag_name }}</nobr></code></a>{% if page.tags.last != tag %}&nbsp;{% endif %}
+      {% endfor %}
+    ]</span>
+  {% endif %}
+  {{ content }}
+</article>

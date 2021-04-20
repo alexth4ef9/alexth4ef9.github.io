@@ -1,0 +1,7 @@
+span.email {
+  unicode-bidi:bidi-override;
+  direction: rtl;
+}
+span.email:after {
+  content: "moc.liamg\40golb+9fe4htxela";
+}
